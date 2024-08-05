@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: spring-boot-api-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: dev
+            namespace: dev
+            chartValuesFile: values-dev.yaml
+          - cluster: prd
+            namespace: prd
+            chartValuesFile: values-prd.yaml
+  template:
+    metadata:
+      name: '{{cluster}}-spring-boot-api'
+    spec:
+      project: development
+      source:
+        repoURL: 'https://github.com/YOUR_GITHUB_REPO'
+        targetRevision: HEAD
+        path: 'spring-boot-api'
+        helm:
+          valueFiles:
+            - '{{chartValuesFile}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+      # Create namespace if it does not exist
+      namespace:
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: '{{namespace}}'

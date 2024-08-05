@@ -1,0 +1,18 @@
+---
+controller:
+  config:
+    compute-full-forwarded-for: "true"
+    use-forwarded-headers: "true"
+    proxy-body-size: "0"
+  ingressClassResource:
+    name: external-nginx
+    enabled: true
+    default: false
+  replicaCount: 1
+  admissionWebhooks:
+    enabled: false
+  service:
+    annotations:
+      cloud.google.com/load-balancer-type: External
+  metrics:
+    enabled: false
