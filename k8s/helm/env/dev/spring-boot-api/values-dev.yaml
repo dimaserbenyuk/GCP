@@ -54,8 +54,8 @@ securityContext: {}
 service:
   type: ClusterIP
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 80
+      targetPort: 80
       protocol: TCP
       name: http-8080
     - port: 8081
