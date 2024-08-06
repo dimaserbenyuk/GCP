@@ -103,7 +103,7 @@ autoscaling:
 volumes:
   - name: config-volume
     configMap:
-      name: dev-spring-boot-api-config
+      name: spring-boot-api-config
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: 
