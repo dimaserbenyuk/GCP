@@ -25,13 +25,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-environment: dev
-
-deploymentStrategy:
-  type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 1
-    maxUnavailable: 1
+environment: prod
 
 args:
   dev: "--spring.profiles.active=dev"
@@ -103,7 +97,7 @@ autoscaling:
 volumes:
   - name: config-volume
     configMap:
-      name: spring-boot-api-config
+      name: prod-spring-boot-api-config
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts: 
