@@ -8,16 +8,12 @@ metadata:
   annotations:
     checksum/secret: "{{ $secretChecksum }}"
 spec:
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      # The default value is 25%.
-      # maxUnavailable is an optional field that specifies the maximum number of Pods that can be unavailable during the update process.
-      maxUnavailable: 4 # The value can be an absolute number (for example, 5) or a percentage of desired Pods (for example, 10%). 
-      # maxSurge is an optional field that specifies the maximum number of Pods that can be created over the desired number of Pods.
-      maxSurge: 4 # The value can be an absolute number (for example, 5) or a percentage of desired Pods (for example, 10%). 
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{- with .Values.deploymentStrategy }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   selector:
     matchLabels:
