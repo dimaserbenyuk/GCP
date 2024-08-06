@@ -56,6 +56,8 @@ service:
   ports:
     - port: 80
       targetPort: 80
+      protocol: TCP
+      name: '80'
     - port: 8081
       targetPort: 8081
       protocol: TCP
