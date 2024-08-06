@@ -31,7 +31,7 @@ environment: dev
 deploymentStrategy:
   type: RollingUpdate
   rollingUpdate:
-    maxUnavailable: 25%
+    maxUnavailable:
     maxSurge: 25%
 
 args:
