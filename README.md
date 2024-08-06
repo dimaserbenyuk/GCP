@@ -16,3 +16,7 @@ Kubernetes, ArgoCD, Helm
 ![image](/images/8.png)
 
 ![image](/images/9.png)
+
+![image](/images/10.png)
+
+![image](/images/11.png)
