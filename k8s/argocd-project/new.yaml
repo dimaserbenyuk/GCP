@@ -1,40 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: spring-boot-api-appset
+  name: spring-boot-api
   namespace: argocd
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
-    - list:
-        elements:
-          - cluster: dev
-            namespace: dev
-            chartValuesFile: values-dev.yaml
-          - cluster: prd
-            namespace: prd
-            chartValuesFile: values-prd.yaml
+  - list:
+      elements:
+      - cluster: spring-boot-api
+        url: https://kubernetes.default.svc
+      - cluster: spring-boot-api-prod
+        url: gke_gcp-1-431611_us-central1-a_prd-global-cluster-5
   template:
     metadata:
-      name: '{{cluster}}-spring-boot-api'
+      name: '{{.cluster}}-guestbook'
     spec:
       project: development
       source:
         repoURL: https://github.com/dimaserbenyuk/GCP
         targetRevision: HEAD
-        path: /k8s/helm/spring-boot-api
-        helm:
-          valueFiles:
-            - '{{chartValuesFile}}'
+        path: k8s/helm/env/dev/{{.cluster}}
       destination:
-        server: 'https://kubernetes.default.svc'
-        namespace: '{{namespace}}'
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true
-      # Create namespace if it does not exist
-      namespace:
-        apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: '{{namespace}}'
+        server: '{{.url}}'
+        namespace: guestbook

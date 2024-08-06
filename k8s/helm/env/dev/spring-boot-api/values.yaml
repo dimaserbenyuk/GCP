@@ -1,0 +1,118 @@
+# Default values for spring-boot-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+
+image:
+  repository: busybox
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "stable"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+environment: dev
+
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+
+args:
+  dev: "--spring.profiles.active=dev"
+  prd: "--spring.profiles.active=prd"
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+service:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http-8080
+    - port: 8081
+      targetPort: 8081
+      protocol: TCP
+      name: http-8081
+    - port: 8082
+      targetPort: 8082
+      protocol: TCP
+      name: http-8082
+
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe: 
+  # httpGet:
+  #   path: /
+  #   port: 8080
+  # initialDelaySeconds: 30
+  # timeoutSeconds: 5
+  # periodSeconds: 10
+  # failureThreshold: 3
+readinessProbe:
+  # httpGet:
+  #   path: /
+  #   port: 8080
+  # initialDelaySeconds: 30
+  # timeoutSeconds: 5
+  # periodSeconds: 10
+  # failureThreshold: 3
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+volumes:
+  - name: config-volume
+    configMap:
+      name: spring-boot-api-config
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts: 
+  - name: config-volume
+    mountPath: /app/config.json
+    subPath: config.json
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
