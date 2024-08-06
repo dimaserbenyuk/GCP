@@ -28,6 +28,11 @@ serviceAccount:
 environment: dev
 
 
+deploymentStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 25%
+    maxSurge: 25%
 
 args:
   dev: "--spring.profiles.active=dev"
