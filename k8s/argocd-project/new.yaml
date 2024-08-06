@@ -9,19 +9,29 @@ spec:
   generators:
   - list:
       elements:
-      - cluster: spring-boot-api
+      - name: dev
+        cluster: spring-boot-api
         url: https://kubernetes.default.svc
-      - cluster: spring-boot-api-prod
+        path: k8s/helm/env/dev
+      - name: prod
+        cluster: spring-boot-api
         url: gke_gcp-1-431611_us-central1-a_prd-global-cluster-5
+        path: k8s/helm/env/prod
   template:
     metadata:
-      name: '{{.cluster}}-guestbook'
+      name: '{{.name}}-spring-boot-api'
     spec:
       project: development
       source:
         repoURL: https://github.com/dimaserbenyuk/GCP
         targetRevision: HEAD
-        path: k8s/helm/env/dev/{{.cluster}}
+        path: '{{.path}}/{{.cluster}}'
       destination:
         server: '{{.url}}'
-        namespace: guestbook
+        namespace: spring-boot-api
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
