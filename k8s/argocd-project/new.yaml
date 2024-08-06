@@ -19,9 +19,9 @@ spec:
     spec:
       project: development
       source:
-        repoURL: 'https://github.com/YOUR_GITHUB_REPO'
+        repoURL: https://github.com/dimaserbenyuk/GCP
         targetRevision: HEAD
-        path: 'spring-boot-api'
+        path: /k8s/helm/spring-boot-api
         helm:
           valueFiles:
             - '{{chartValuesFile}}'
