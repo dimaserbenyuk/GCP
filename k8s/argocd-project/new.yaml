@@ -13,10 +13,12 @@ spec:
         cluster: spring-boot-api
         url: https://kubernetes.default.svc
         path: k8s/helm/env/dev/spring-boot-api
+        valuesFile: values-dev.yaml
       - name: prod
         cluster: gke_gcp-1-431611_us-central1-a_prd-global-cluster-5
         url: https://34.173.10.36
         path: k8s/helm/env/prod/spring-boot-api
+        valuesFile: values-prd.yaml
   template:
     metadata:
       name: '{{.name}}-spring-boot-api'
@@ -26,6 +28,9 @@ spec:
         repoURL: https://github.com/dimaserbenyuk/GCP
         targetRevision: HEAD
         path: '{{.path}}/'
+        helm:
+          valueFiles:
+          - '{{.valuesFile}}'
       destination:
         server: '{{.url}}'
         namespace: spring-boot-api
