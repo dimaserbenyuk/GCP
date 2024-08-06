@@ -31,8 +31,8 @@ environment: dev
 deploymentStrategy:
   type: RollingUpdate
   rollingUpdate:
-    maxUnavailable:
-    maxSurge: 25%
+    maxUnavailable: 2
+    maxSurge: 2
 
 args:
   dev: "--spring.profiles.active=dev"
